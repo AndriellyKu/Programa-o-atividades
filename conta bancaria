@@ -1,0 +1,115 @@
+import java.util.Scanner;
+import java.util.Random;
+
+class Conta {
+    private static final Scanner ler = new Scanner(System.in);
+    String titular;
+    int identificador;
+    float saldo;
+
+    void sacar() {
+        System.out.println("Quanto você deseja sacar?");
+        float valor = ler.nextFloat();
+        if (valor > saldo) {
+            System.out.println("Saldo insuficiente para saque.");
+        } else {
+            saldo -= valor;
+            System.out.println("Você sacou R$" + valor);
+            System.out.println("Seu saldo na conta agora é R$" + saldo);
+        }
+    }
+
+    void depositar() {
+        System.out.println("Quanto você deseja depositar?");
+        float valor = ler.nextFloat();
+        saldo += valor;
+        System.out.println("Você depositou R$" + valor);
+        System.out.println("Seu saldo agora é R$" + saldo);
+    }
+
+    void exibirDetalhes() {
+        System.out.println("-----------------");
+        System.out.println("Titular: " + titular);
+        System.out.println("Identificador: " + identificador);
+        System.out.println("Saldo: R$" + saldo);
+        System.out.println("-----------------");
+    }
+}
+
+public class AtividadeUm {
+    public static void main(String[] args) {
+        Scanner ler = new Scanner(System.in);
+        Conta[] usuarios = new Conta[100];
+        int totalContas = 0;
+
+        while (true) {
+            System.out.println("O que você deseja fazer?");
+            System.out.println("1 - Criar uma conta");
+            System.out.println("2 - Listar todas as contas");
+            System.out.println("3 - Acessar uma conta");
+            System.out.println("4 - Sair");
+            int opcao = ler.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    Conta novaConta = new Conta();
+                    System.out.println("Insira o nome do titular:");
+                    novaConta.titular = ler.next();
+                    novaConta.identificador = new Random().nextInt(80000) + 10000; // Gerando identificador entre 10000 e 89999
+                    System.out.println("Seu identificador é " + novaConta.identificador);
+                    System.out.println("Insira o saldo inicial da conta:");
+                    novaConta.saldo = ler.nextFloat();
+                    usuarios[totalContas] = novaConta;
+                    totalContas++;
+                    break;
+
+                case 2:
+                    if (totalContas == 0) {
+                        System.out.println("Nenhuma conta cadastrada.");
+                    } else {
+                        for (int i = 0; i < totalContas; i++) {
+                            usuarios[i].exibirDetalhes();
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Insira o identificador da conta:");
+                    int identificador = ler.nextInt();
+                    boolean contaEncontrada = false;
+
+                    for (int i = 0; i < totalContas; i++) {
+                        if (usuarios[i].identificador == identificador) {
+                            usuarios[i].exibirDetalhes();
+                            System.out.println("O que você deseja fazer?");
+                            System.out.println("1 - Sacar");
+                            System.out.println("2 - Depositar");
+                            int opcaoTransacao = ler.nextInt();
+
+                            if (opcaoTransacao == 1) {
+                                usuarios[i].sacar();
+                            } else if (opcaoTransacao == 2) {
+                                usuarios[i].depositar();
+                            } else {
+                                System.out.println("Opção inválida.");
+                            }
+                            contaEncontrada = true;
+                            break;
+                        }
+                    }
+
+                    if (!contaEncontrada) {
+                        System.out.println("Conta não encontrada.");
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("Saindo...");
+                    return;
+
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
+    }
+}
