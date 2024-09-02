@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class Segundaatividade {
+    public static void main(String[] args) {
+        Scanner ler = new Scanner(System.in);
+        int aux = 1;
+
+        while (aux != 0) {
+            System.out.println("Digite um número:");
+            try {
+                int num = ler.nextInt();
+                aux = 0;
+            } catch (Exception error) {
+                System.out.println("Erro: " + error.getMessage() + ". Por favor, tente novamente.");
+                ler.next();
+            }
+        }
+
+        try {
+            int resultado = divide(1, 0);
+        } catch (ArithmeticException e) {
+            System.out.println("Erro de divisão: " + e.getMessage());
+        }
+    }
+
+    public static int divide(int n1, int n2) {
+        if (n2 == 0) {
+            throw new ArithmeticException("Divisão por zero não permitida!");
+        }
+        return n1 / n2;
+    }
+}
